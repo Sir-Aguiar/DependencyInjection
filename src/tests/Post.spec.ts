@@ -22,8 +22,8 @@ describe("Checking if the post class is working good", () => {
 });
 
 describe("Running to error", () => {
-	const notificatorMock = new Notificator();
-	const post = new Post("Mock title", notificatorMock);
+	const notificator = new Notificator();
+	const post = new Post("Mock title", notificator);
 	test("Notificator should throw", () => {
 		expect(() => {
 			post.post();
