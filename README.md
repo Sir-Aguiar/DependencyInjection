@@ -51,6 +51,7 @@ You can see that this component doesn't depend of another component to work, rig
 Let's take a look at this one:
 
 ```js
+
 import Notificator from "./Notificator";
 
 class Post {
@@ -63,6 +64,7 @@ class Post {
 		this.notificator.send();
 	}
 }
+
 ```
 
 There's nothing syntactic wrong with it, but can you see how much my Post class is dependent of the Notificator class? Everytime I create an object of Post, i'm also creating a Notificator object.
