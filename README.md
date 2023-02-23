@@ -119,7 +119,7 @@ Now i need to implement this interface to my Notificator class, see how we do it
 
 ```ts
 class Notificator {
-	send(){
+	send() {
 		console.log("The notification has been sended");
 	}
 }
