@@ -11,5 +11,5 @@
 		"resolveJsonModule": true,
 		"moduleResolution": "Node"
 	},
-  "include": ["src/**/*.ts"]
+	"include": ["src/**/*.ts"]
 }
