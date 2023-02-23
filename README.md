@@ -36,7 +36,7 @@ But let's take a look on how it does it, where it lives, and from where it came 
 
 Look at this code:
 
-```js
+```typescript
 class Notificator {
 	send() {
 		console.log("The notification has been sended");
@@ -268,7 +268,6 @@ describe("Checking if the post class is working good", () => {
 > Usually you spent the most part of your time hoping it don't throw something, but you remember right? I changed my code so it throws an error everytime _new Notificator().send()_ is called
 
 ```js
-
 describe("Checking if the post class is working good", () => {
 	const notificatorMock: NotificatorShape = { send() {} };
 	const post = new Post("Mock title", notificatorMock);
@@ -291,7 +290,6 @@ describe("Running to error", () => {
 		}).toThrow();
 	});
 });
-
 ```
 
 > Now, you've finally tested you code, and learned the most two important and used design patterns in the world (Dep. Inj., Dep. Inv.)! So proud of you.
