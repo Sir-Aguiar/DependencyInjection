@@ -25,7 +25,7 @@ By doing it you're helping another people to study, and giving the world more ma
 
 This code send to our users a notification when some new post is released
 
-```
+```ts
   const notificator = new Notificator();
   const post = new Post("Title", notificator);
   post.send() // BANG! Your users finally know you've made a new post
@@ -37,7 +37,7 @@ But let's take a look on how it does it, where it lives, and from where it came 
 
 Look at this code:
 
-```
+```ts
 class Notificator {
 	send(){
 		console.log("The notification has been sended");
@@ -51,7 +51,7 @@ You can see that this code doesn't depend from another component to work right? 
 
 Let's take a look at this one:
 
-```
+```ts
 import Notificator from "./Notificator";
 
 class Post {
@@ -72,7 +72,7 @@ Plus the fact that my component it's directly dependent from another one to comp
 
 ### Using dependency injection
 
-```
+```ts
 import Notificator from "./Notificator";
 
 class Post {
@@ -107,7 +107,7 @@ Lets pretend that inside my new Notificator().send() i have the whole code to se
 
 Inside my Post class, i'm not using the whole Notificator class or some code that belong ESPECIFICALLY to it, and i shouldn't. So let's take the properties I need inside my component and build my interface with it. In this case i only need the _send()_ method, and not the whole instance of the class.
 
-```
+```ts
 interface NotificatorShape {
   send():void;
 }
@@ -117,7 +117,7 @@ Now i need to implement this interface to my Notificator class, see how we do it
 
 ### Before
 
-```
+```ts
 class Notificator {
 	send(){
 		console.log("The notification has been sended");
@@ -127,7 +127,7 @@ class Notificator {
 
 ### After
 
-```
+```ts
 import NotificatorShape from "../@types/Notificator";
 
 class Notificator implements NotificatorShape {
@@ -143,14 +143,14 @@ Well, that's the way you got to ensure and enforce that the properties you need 
 
 ### What's the difference?
 
-```
+```ts
 const notificator1:NotificatorShape = {
   send () {}
 }
 notificator1.send()
 ```
 
-```
+```ts
 const notificator2:Notificator = new Notificator()
 notificator2.send()
 ```
@@ -163,7 +163,7 @@ Inside my _notificator2.send()_ method i have the whole implementation of a func
 
 So wich one do you prefer to use in your tests? The last one right? But before we jump in to our tests, we need to make a few changes inside our Post entity, let's see:
 
-```
+```ts
 import NotificatorShape from "../@types/Notificator";
 
 class Post {
@@ -185,7 +185,7 @@ Imagine you wanna create a post and send a notification to your users, you still
 
 ### Before
 
-```
+```ts
   const notificator = new Notificator();
   const post = new Post("Title", notificator);
   post.send() // BANG! Your users finally know you've made a new post
@@ -193,7 +193,7 @@ Imagine you wanna create a post and send a notification to your users, you still
 
 ### After
 
-```
+```ts
   const notificator = new Notificator();
   const post = new Post("Title", notificator);
   post.send() // BANG! Your users finally know you've made a new post
@@ -213,7 +213,7 @@ But I told you that i was teaching you how to write tests right? Let's go then, 
 
 ### Importing all of my dependencies
 
-```
+```ts
 import { describe, test, expect } from "vitest";
 import Post from "../entities/Post";
 import NotificatorShape from "../@types/Notificator";
@@ -222,7 +222,7 @@ import Notificator from "../entities/Notificator";
 
 ### Creating my test case, and giving it a good name of what I expect it to do
 
-```
+```ts
 describe("Checking if the post class is working good", () => {
 
 });
@@ -234,7 +234,7 @@ The first argument it's like the title of the case, and the second it's a callba
 
 > A _mock_ is like "Hey, i wan't you to pretend you do something, but you actually don't, cause if you do I'm f\*\*\*\*d"
 
-```
+```ts
 describe("Checking if the post class is working good", () => {
 	const notificatorMock: NotificatorShape = { send() {} };
 	const post = new Post("Mock title", notificatorMock);
@@ -246,7 +246,7 @@ describe("Checking if the post class is working good", () => {
 
 > If you're testing something you call your code, expect something to happen and checks if that happens. I know that's what you do when testing it by hand
 
-```
+```ts
 describe("Checking if the post class is working good", () => {
 	const notificatorMock: NotificatorShape = { send() {} };
 	const post = new Post("Mock title", notificatorMock);
