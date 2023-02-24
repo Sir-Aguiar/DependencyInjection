@@ -38,9 +38,9 @@ Look at this code:
 
 ```typescript
 class Notificator {
-	send() {
-		console.log("The notification has been sended");
-	}
+  send() {
+    console.log("The notification has been sended");
+  }
 }
 ```
 
@@ -55,14 +55,14 @@ Let's take a look at this one:
 import Notificator from "./Notificator";
 
 class Post {
-	private notificator: Notificator;
-	constructor(public title: string) {
-		this.notificator = new Notificator();
-	}
-	post(): void {
-		console.log(`New post has been published: ${this.title}`);
-		this.notificator.send();
-	}
+  private notificator: Notificator;
+    constructor(public title: string) {
+      this.notificator = new Notificator();
+    }
+  post(): void {
+    console.log(`New post has been published: ${this.title}`);
+    this.notificator.send();
+  }
 }
 
 ```
