@@ -141,7 +141,7 @@ class Notificator implements NotificatorShape {
 
 ### Why use _implements_?
 
-Well, that's the way you got to ensure and enforce that the properties you need are gonna be present to the object, and have some security about it's type, once you define the name and the type it NEEDS inside your interface.
+Well, that's the way you got to ensure and enforce that the properties you need are gonna be present to the object, and have some security about it's type, once you define the name and the type it needs inside your interface.
 
 ### What's the difference?
 
@@ -163,7 +163,7 @@ Inside my _notificator2.send()_ method i have the whole implementation of a func
 
 > And we all agree that also both have the _send()_ property.
 
-So wich one do you prefer to use in your tests? The last one right? But before we jump in to our tests, we need to make a few changes inside our Post entity, let's see:
+So wich one do you prefer to use in your tests? The first one right? But before we jump in to our tests, we need to make a few changes inside our Post entity, let's see:
 
 ```js
 import NotificatorShape from "../@types/Notificator";
@@ -183,7 +183,7 @@ WE FINALLY DID IT! Our Post entity it's **_FULLY UNDOCKED_**
 
 Well, you must be blind. Let me show you that this is not the same than before.
 
-Imagine you wanna create a post and send a notification to your users, you still can do it, and the implementation of this functionality hasn't changed a bit:
+Imagine you wanna create a post and send a notification to your users, you still can do it, and the implementation of this functionality hasn't changed a bit. Just look at my code implementation:
 
 ### Before
 
@@ -203,7 +203,7 @@ post.send(); // BANG! Your users finally know you've made a new post
 
 I think i just cried in here, can you imagine? Refactoring your code and its implementation is still the same, and works as it should. Man, that's heaven.
 
-But I told you that i was teaching you how to write tests right? Let's go then, I'm a man of word, but I warn you: **You don't need to change a single letter from your source code now, the code and the test, run independently**.
+But I told you that I was gonna teach you how to write tests right? Let's go then, I'm a man of word, but I warn you: **You don't need to change a single letter from your source code now, the code and the test run independently**.
 
 ### I'm so in heaven that i need to say to my code "Hey! Gimme an error to have fun"
 
@@ -211,7 +211,7 @@ But I told you that i was teaching you how to write tests right? Let's go then, 
 
 # Writing some tests
 
-> ### If you're not familiarized with Jest ou another test framework, no worries, it's quite intuitive and also very easy to learn. In here i'm using Vitest, just by preference, honestly, but syntax it's just like Jest.
+> ### If you're not familiarized with Jest or another test framework, no worries, it's quite intuitive and also very easy to learn. In here i'm using Vitest, just by preference, honestly, syntax it's just like Jest.
 
 ### Importing all of my dependencies
 
@@ -222,7 +222,7 @@ import NotificatorShape from "../@types/Notificator";
 import Notificator from "../entities/Notificator";
 ```
 
-### Creating my test case, and giving it a good name of what I expect it to do
+### Creating my test case and giving it a good name of what I expect it to do
 
 ```js
 describe("Checking if the post class is working good", () => {});
@@ -243,7 +243,7 @@ describe("Checking if the post class is working good", () => {
 
 ### Now I'm telling my test case what to expect to receive
 
-> If you're testing something you call your code, expect something to happen and checks if that happens. I know that's what you do when testing it by hand
+> When you're testing something, you call your code, expect something to happen and checks if that happens. I know that's what you do when testing it by hand
 
 ```js
 describe("Checking if the post class is working good", () => {
@@ -263,7 +263,7 @@ describe("Checking if the post class is working good", () => {
 
 > The _expect_ function receives a function, kinda funny, right? And it takes the return of the function, then you can access a thousand of properties and methods that checks if it returns true, if it does, **CONGRATULATIONS YOUR TEST JUST PASSED**;
 
-> But what i've tested exactly? I said to my test "Hey, expect it to have a title property" and then i said "[...] post property";
+> But what i've tested exactly? I said to my test "Hey, expect it to have a title property" and then I said "[...] post method".
 
 ### Now it comes the more weird part, you're telling you test to expect an error.
 
@@ -298,4 +298,4 @@ describe("Running to error", () => {
 
 ### Now write your own example, write your own code and your own tests. Go to the world and build a rocket, I don't know!
 
-### If this repository was useful for you give it a star, and share with us your code.
+### If this repository was useful for you, give it a star, and share with us your code.

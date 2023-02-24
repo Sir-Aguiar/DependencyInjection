@@ -134,3 +134,164 @@ class Notificator implements NotificatorShape {
 	}
 }
 ```
+
+### Por que usar _implements_?
+
+Bem, este é o jeito de assegurar e forçar que as propriedades que você precisa vão estar presentes no objeto, e tenha alguma segurança em seu tipo, uma vez que se define o nome e o tipo que é necessário dentro de sua interface.
+
+### Qual é a diferença?
+
+```js
+const notificator1: NotificatorShape = {
+	send() {},
+};
+notificator1.send();
+```
+
+```js
+const notificator2: Notificator = new Notificator();
+notificator2.send();
+```
+
+Dentro do método _notificator2.send()_ eu tenho toda a implementação da funcionalidade. E nós nem precisamos fingir que _notificator1.send()_ não faz nada, porque na verdade ele não faz.
+
+> Dê uma olhada, ambos são objetos, mas notificator2 é a instância de uma classe, e notificator1 não é;
+
+> E todos concordamos que ambos também têm a propriedade _send()_.
+
+Qual você prefere para usar em seus testes? O primeiro certo (notificator1)? Antes de mergulhar em nossos testes, vamos fazer algumas mudanças dentro da nossa entidade Post, veja:
+
+```js
+import NotificatorShape from "../@types/Notificator";
+
+class Post {
+	constructor(public title: string, private notificator: NotificatorShape) {}
+	post(): void {
+		console.log(`New post has been published: ${this.title}`);
+		this.notificator.send();
+	}
+}
+```
+
+FINALMENTE! Nossa entidade Post está **_COMPLETAMENTE DESACOPLADA_**.
+
+### O que? Por quê? E como? Você está louco? Parece a mesma coisa para mim
+
+Bem, não é. Deixe-me mostrar que isto não é a mesma coisa de antes.
+
+Imagine que você queira criar um post e enviar uma notificação para todos usuários, você ainda pode fazê-lo, a implementação da funcionalidade é a mesma, e não mudou nada. Olhe como está a implementação do nosso código:
+
+### Antes
+
+```js
+const notificator = new Notificator();
+const post = new Post("Title", notificator);
+post.send(); // BANG! Your users finally know you've made a new post
+```
+
+### Depois
+
+```js
+const notificator = new Notificator();
+const post = new Post("Title", notificator);
+post.send(); // BANG! Your users finally know you've made a new post
+```
+
+Eu acho que acabei de chorar aqui, consegue imaginar? Refatorar seu código e sua implementação continuar a mesma, e funcionar como deveria funcionar. Cara, isto é o paraíso.
+
+Mas eu disse que iria lhe ensinar a como escrever testes, certo? Então vamos lá, sou um homem de palavra, mas eu já aviso: **Você não _precisa_ mudar uma única letra de seu código fonte agora, o código e o teste rodam independentemente**
+
+### Eu estou tão no paraíso que eu preciso dizer ao meu código "Ei! Me dá um erro para poder brincar"
+
+> Eu disse que você não _precisava_ mudar uma letra sequer, mas você escreveu um código tão bom, que se você só escrever os testes não vai ser tão didático para você perceber o quão importante este pattern que você acabou de aprender é.
+
+# Escrevendo alguns testes
+
+> ### Se você não está familiarizado com Jest ou outro framework para testes, nem esquenta, é bem intuítivo e também bem fácil de se aprender. Aqui nós iremos utilizar o Vitest, somente por preferência, honestamente, a sintaxe é similar à do Jest.
+
+### Importando todas minhas dependências
+
+```js
+import { describe, test, expect } from "vitest";
+import Post from "../entities/Post";
+import NotificatorShape from "../@types/Notificator";
+import Notificator from "../entities/Notificator";
+```
+
+### Criando minha unidade de teste e dando um bom nome do que esperamos que ele faça
+
+```js
+describe("Checking if the post class is working good", () => {});
+```
+
+Este primeiro argumento é como o título da unidade, e o segundo é um callbackk que roda toda vez que a unidade é testada.
+
+### Agora vamos criar alguns mocks
+
+> Um mock é tipo "Ei, eu quero que você finja fazer alguma coisa, mas na verdade não o faça, porque se fizer eu to f**\***"
+
+```js
+describe("Checking if the post class is working good", () => {
+	const notificatorMock: NotificatorShape = { send() {} };
+	const post = new Post("Mock title", notificatorMock);
+});
+```
+
+### Agora nós estamos dizendo a nossa unidade de teste o que ela espera receber.
+
+> Ao testar seu código, você o chama, espera que algo aconteça, e então checa se isto realmente aconteceu. Eu sei que é isto que você faz ao testar na mão.
+
+```js
+describe("Checking if the post class is working good", () => {
+	const notificatorMock: NotificatorShape = { send() {} };
+	const post = new Post("Mock title", notificatorMock);
+
+	test("Should've title", () => {
+		expect(post).toHaveProperty("title");
+	});
+
+	test("Should've post", () => {
+		0;
+		expect(post).toHaveProperty("post");
+	});
+});
+```
+
+> A função _expect_ recebe uma função, é meio engraçado. E então ela pega o valor que foi retornado desta função, você tem acesso há mil e uma propriedades que checam a validade deste valor, e caso esta checagem seja true, **PARABÉNS AGORA SEU TESTE ACABOU DE PASSAR**;
+
+> Mas o que eu testei exatamente? Eu falei pro meu teste "Ei, espere que ele tenha a propriedade title", e então eu disse "[...] o método post".
+
+### Agora vem a parte mais estranha, você está dizendo ao seu teste que ele deve esperar que seu código erre.
+
+> Normalmente você passa a maior parte do seu tempo esperando que seu código não dê algum erro, mas você lembra, certo? Eu mudei meu código para que ele dê erro todas as vezes em que for chamado o método _new Notificator().send()_
+
+```js
+describe("Checking if the post class is working good", () => {
+	const notificatorMock: NotificatorShape = { send() {} };
+	const post = new Post("Mock title", notificatorMock);
+
+	test("Should've title", () => {
+		expect(post).toHaveProperty("title");
+	});
+
+	test("Should've post", () => {
+		0;
+		expect(post).toHaveProperty("post");
+	});
+});
+describe("Running to error", () => {
+	const notificator = new Notificator();
+	const post = new Post("Mock title", notificator);
+	test("Notificator should throw", () => {
+		expect(() => {
+			post.post();
+		}).toThrow();
+	});
+});
+```
+
+> Agora, você acabou de testar seu código, e aprendeu os dois mais importantes e utilizados patterns no mundo (Inj. Dep., Inv. Dep.)! Estou orgulhoso de você!
+
+### Agora escreva seu próprio exemplo, escreva seu código e seus testes. Vá ao mundo real e construa um foguete, sei lá!
+
+### Se este repositório foi útil à você, dê uma estrela, e compartilhe conosco seu código.
