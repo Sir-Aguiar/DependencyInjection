@@ -10,7 +10,8 @@ describe("Checking if the post class is working good", () => {
 		expect(post).toHaveProperty("title");
 	});
 
-	test("Should've post", () => {0
+	test("Should've post", () => {
+		0;
 		expect(post).toHaveProperty("post");
 	});
 

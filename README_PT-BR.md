@@ -18,7 +18,7 @@ Ao fazer isto está ajudando outras pessoas em seus estudos, e dando ao mundo ma
 
 ## Code stack
 
-**Linguagem**: Sinta-se livre para usar a linguagem que preferir, mas eu recomendo fortemente o uso aprendizado deste design pattern com TypeScript. Mas sempre use a linguagem que mais domina, afinal o pattern é mais importante do que código. Uma vez que o aprende, escreva-o como e onde quiser
+**Linguagem**: Sinta-se livre para usar a linguagem que preferir, mas eu recomendo fortemente o aprendizado deste design pattern com TypeScript. Mas sempre use a linguagem que mais domina, afinal o pattern é mais importante do que código. Uma vez que o aprende, escreva-o como e onde quiser
 
 # Funcionalidade
 
@@ -71,21 +71,21 @@ Com o brinde de que meu componente é diretamente dependente de outro para compi
 
 ### Usando injeção de dependência
 
-```ts
+```js
 import Notificator from "./Notificator";
 
 class Post {
-	constructor(public title: string, private notificator: Notificator) {}
-	post(): void {
-		console.log(`New post has been published: ${this.title}`);
-		this.notificator.send();
-	}
+  constructor(public title: string, private notificator: Notificator) {}
+  post(): void {
+    console.log(`New post has been published: ${this.title}`);
+    this.notificator.send();
+  }
 }
 ```
 
 Mas sim, nosso componente continua diretamente dependente da nossa entidade Notificator. Então se você quiser criar uma instância de Post, você precisa de uma instância de Notificator, MAS, e é um GRANDE MAS: Com este novo código você pode criar uma instância de Notificator fora de Post. E ao mesmo tempo esta instância pode ser utilizada para construir o Post, uma vez que o mesmo tem a dependência de um Notificator em seu construtor. E é por isso que chamamos de injeção de dependência... uma dependência... que injetamos.
 
-Nosso componente agora está parcialmente desacoplado dos outros. Você não está mais criando uma instância de Notificator TODAS AS VEZES que criar uma instância de Post, o que pode lhe salvar de um vazamento de memória ou ficar careca enquanto debugga seu código.
+Nosso componente agora está parcialmente desacoplado dos outros. Você não está mais criando uma instância de Notificator TODAS AS VEZES que criar uma instância de Post, o que pode lhe salvar de um vazamento de memória ou ficar careca enquanto debuga seu código.
 
 E se você quiser testar seu código, e deveria, ainda há um problema, imagina que sua classe Notificator funciona sobre sua base de dados? Você não pode conectar-se ao banco de dados toda vez que quiser rodar seus testes. Não se preocupe, eu te salvo, meu chapa. Vamos ver como resolver este problema também.
 
@@ -95,7 +95,7 @@ Porque se você quiser escrever testes unitários, você deve ter componentes un
 
 `private notificator:Notificator`
 
-E isto não significa que você está recebendo um objeto tipado como Notificator ou um cujo tipo mescle com a tipagem de Notificator. Isto significa que você está recebendo um objeto a partir da **classe**, uma instância da classe.
+E isto não significa que você está recebendo um objeto tipado como Notificator ou um cujo tipo bata com a tipagem de Notificator. Isto significa que você está recebendo um objeto a partir da **classe**, uma instância da classe.
 
 ## Resolvendo seu problema
 
@@ -115,7 +115,7 @@ Agora eu preciso implementar minha interface na minha classe Interface, vamos ve
 
 ### Antes
 
-```ts
+```js
 class Notificator {
 	send() {
 		console.log("The notification has been sended");
@@ -125,7 +125,7 @@ class Notificator {
 
 ### Depois
 
-```ts
+```js
 import NotificatorShape from "../@types/Notificator";
 
 class Notificator implements NotificatorShape {
@@ -143,7 +143,7 @@ Bem, este é o jeito de assegurar e forçar que as propriedades que você precis
 
 ```js
 const notificator1: NotificatorShape = {
-	send() {},
+  send() {},
 };
 notificator1.send();
 ```
@@ -165,11 +165,11 @@ Qual você prefere para usar em seus testes? O primeiro certo (notificator1)? An
 import NotificatorShape from "../@types/Notificator";
 
 class Post {
-	constructor(public title: string, private notificator: NotificatorShape) {}
-	post(): void {
-		console.log(`New post has been published: ${this.title}`);
-		this.notificator.send();
-	}
+  constructor(public title: string, private notificator: NotificatorShape) {}
+  post(): void {
+    console.log(`New post has been published: ${this.title}`);
+    this.notificator.send();
+  }
 }
 ```
 
@@ -257,7 +257,7 @@ describe("Checking if the post class is working good", () => {
 });
 ```
 
-> A função _expect_ recebe uma função, é meio engraçado. E então ela pega o valor que foi retornado desta função, você tem acesso há mil e uma propriedades que checam a validade deste valor, e caso esta checagem seja true, **PARABÉNS AGORA SEU TESTE ACABOU DE PASSAR**;
+> A função _expect_ recebe uma função, é meio engraçado. E então ela pega o valor que foi retornado desta função, você tem acesso a mil e uma propriedades que checam a validade deste valor, e caso esta checagem seja true, **PARABÉNS AGORA SEU TESTE ACABOU DE PASSAR**;
 
 > Mas o que eu testei exatamente? Eu falei pro meu teste "Ei, espere que ele tenha a propriedade title", e então eu disse "[...] o método post".
 

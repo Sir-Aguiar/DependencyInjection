@@ -36,11 +36,11 @@ But let's take a look on how it does it, where it lives, and from where it came 
 
 Look at this code:
 
-```typescript
+```ts
 class Notificator {
-  send() {
-    console.log("The notification has been sended");
-  }
+	send() {
+		console.log("The notification has been sended");
+	}
 }
 ```
 
@@ -50,34 +50,14 @@ You can see that this component doesn't depend of another component to work, rig
 
 Let's take a look at this one:
 
-```js
-
+```ts
 import Notificator from "./Notificator";
 
 class Post {
-  private notificator: Notificator;
-    constructor(public title: string) {
-      this.notificator = new Notificator();
-    }
-  post(): void {
-    console.log(`New post has been published: ${this.title}`);
-    this.notificator.send();
-  }
-}
-
-```
-
-There's nothing syntactic wrong with it, but can you see how much my Post class is dependent of the Notificator class? Everytime I create an object of Post, i'm also creating a Notificator object.
-
-Plus the fact that my component it's directly dependent from another one to compile, and thats called **_source dependency_**. Let's suppose I wanna create some tests or another thing using the Post class, but I don't wanna have any problem with the Notificator, that can't be done with this code. That's a problem, but let's see a better way to write this class and solve this problem
-
-### Using dependency injection
-
-```js
-import Notificator from "./Notificator";
-
-class Post {
-	constructor(public title: string, private notificator: Notificator) {}
+	private notificator: Notificator;
+	constructor(public title: string) {
+		this.notificator = new Notificator();
+	}
 	post(): void {
 		console.log(`New post has been published: ${this.title}`);
 		this.notificator.send();
@@ -85,7 +65,25 @@ class Post {
 }
 ```
 
-But yes, our component is still directly dependent of Notificator entity. So if you wanna create an instance of Post, you need an instance of Notificator, BUT, and that's a BIG BUT: With this new code you can create an Notificator instance outside your Post, then use it from the outside. At the same time this instance can be used to build the Post, once it has the dependency of a Notificator on its constructor. And that's why we call it dependency injection... a dependency... we injected.
+There's nothing syntactically wrong with it, but can you see how much my Post class is dependent of the Notificator class? Everytime I create an object of Post, i'm also creating an object of Notificator.
+
+And my component it's directly dependent from another one to compile, and thats called **_source dependency_**. Let's suppose I wanna create some tests or another thing using the Post class, but I don't wanna have any problem with the Notificator, that can't be done with this code. That's a problem, but let's see a better way to write this class and solve this problem
+
+### Using dependency injection
+
+```js
+import Notificator from "./Notificator";
+
+class Post {
+  constructor(public title: string, private notificator: Notificator) {}
+  post(): void {
+    console.log(`New post has been published: ${this.title}`);
+    this.notificator.send();
+  }
+}
+```
+
+But yes, our component is still directly dependent of Notificator entity. In other words, you wanna create an instance of Post, you need an instance of Notificator, BUT, and that's a BIG BUT: With this new code you can create an Notificator instance outside your Post, then use it from the outside. At the same time this instance can be used to build the Post, once it has the dependency of a Notificator on its constructor. And that's why we call it dependency injection... a dependency... we injected.
 
 Your component know is partially undocked from another one. You're not creating an instance of Notificator EVERYTIME you create an instance of Post, it might save you from a memory leak and getting bald while debugging your code.
 
@@ -103,15 +101,13 @@ And that means you're not receiving an object typed as Notificator or one wich t
 
 ### Dependency Inversion
 
-SET DEFINITION
-
 Lets pretend that inside my new Notificator().send() I have the whole code to send notifications to my users. Currently, to build my Post object I need an instance of Notificator, but why? Ok, I might want to use the functionality inside it, but am I OBLIGATED to use an instance, otherwise it won't compile? If I wanna test my new Post().send() method, I need to send a notification to all my users? No.
 
 Inside my Post class, i'm not using the whole Notificator class or some code that belong ESPECIFICALLY to it, and i shouldn't. So let's take the properties I need inside my component, and build my interface with it. In this case i only need the _send()_ method, and not the whole instance of the class.
 
-```js
+```ts
 interface NotificatorShape {
-	send(): void;
+  send(): void;
 }
 ```
 
@@ -121,9 +117,9 @@ Now i need to implement this interface to my Notificator class, see how we do it
 
 ```js
 class Notificator {
-	send() {
-		console.log("The notification has been sended");
-	}
+  send() {
+    console.log("The notification has been sended");
+  }
 }
 ```
 
@@ -133,9 +129,9 @@ class Notificator {
 import NotificatorShape from "../@types/Notificator";
 
 class Notificator implements NotificatorShape {
-	send() {
-		console.log("The notification has been sended");
-	}
+  send() {
+    console.log("The notification has been sended");
+  }
 }
 ```
 
@@ -147,7 +143,7 @@ Well, that's the way you got to ensure and enforce that the properties you need 
 
 ```js
 const notificator1: NotificatorShape = {
-	send() {},
+  send() {},
 };
 notificator1.send();
 ```
@@ -169,11 +165,11 @@ So wich one do you prefer to use in your tests? The first one right? But before 
 import NotificatorShape from "../@types/Notificator";
 
 class Post {
-	constructor(public title: string, private notificator: NotificatorShape) {}
-	post(): void {
-		console.log(`New post has been published: ${this.title}`);
-		this.notificator.send();
-	}
+  constructor(public title: string, private notificator: NotificatorShape) {}
+  post(): void {
+    console.log(`New post has been published: ${this.title}`);
+    this.notificator.send();
+  }
 }
 ```
 
