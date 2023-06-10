@@ -38,9 +38,9 @@ Look at this code:
 
 ```ts
 class Notificator {
-	send() {
-		console.log("The notification has been sended");
-	}
+  send() {
+    console.log("The notification has been sended");
+  }
 }
 ```
 
@@ -54,14 +54,14 @@ Let's take a look at this one:
 import Notificator from "./Notificator";
 
 class Post {
-	private notificator: Notificator;
-	constructor(public title: string) {
-		this.notificator = new Notificator();
-	}
-	post(): void {
-		console.log(`New post has been published: ${this.title}`);
-		this.notificator.send();
-	}
+  private notificator: Notificator;
+  constructor(public title: string) {
+    this.notificator = new Notificator();
+  }
+  post(): void {
+    console.log(`New post has been published: ${this.title}`);
+    this.notificator.send();
+  }
 }
 ```
 
@@ -232,8 +232,8 @@ The first argument it's like the title of the case, and the second it's a callba
 
 ```js
 describe("Checking if the post class is working good", () => {
-	const notificatorMock: NotificatorShape = { send() {} };
-	const post = new Post("Mock title", notificatorMock);
+  const notificatorMock: NotificatorShape = { send() {} };
+  const post = new Post("Mock title", notificatorMock);
 });
 ```
 
@@ -243,17 +243,17 @@ describe("Checking if the post class is working good", () => {
 
 ```js
 describe("Checking if the post class is working good", () => {
-	const notificatorMock: NotificatorShape = { send() {} };
-	const post = new Post("Mock title", notificatorMock);
+  const notificatorMock: NotificatorShape = { send() {} };
+  const post = new Post("Mock title", notificatorMock);
 
-	test("Should've title", () => {
-		expect(post).toHaveProperty("title");
-	});
+  test("Should've title", () => {
+    expect(post).toHaveProperty("title");
+  });
 
-	test("Should've post", () => {
-		0;
-		expect(post).toHaveProperty("post");
-	});
+  test("Should've post", () => {
+    0;
+    expect(post).toHaveProperty("post");
+  });
 });
 ```
 
@@ -267,26 +267,26 @@ describe("Checking if the post class is working good", () => {
 
 ```js
 describe("Checking if the post class is working good", () => {
-	const notificatorMock: NotificatorShape = { send() {} };
-	const post = new Post("Mock title", notificatorMock);
+  const notificatorMock: NotificatorShape = { send() {} };
+  const post = new Post("Mock title", notificatorMock);
 
-	test("Should've title", () => {
-		expect(post).toHaveProperty("title");
-	});
+  test("Should've title", () => {
+    expect(post).toHaveProperty("title");
+  });
 
-	test("Should've post", () => {
-		0;
-		expect(post).toHaveProperty("post");
-	});
+  test("Should've post", () => {
+    0;
+    expect(post).toHaveProperty("post");
+  });
 });
 describe("Running to error", () => {
-	const notificator = new Notificator();
-	const post = new Post("Mock title", notificator);
-	test("Notificator should throw", () => {
-		expect(() => {
-			post.post();
-		}).toThrow();
-	});
+  const notificator = new Notificator();
+  const post = new Post("Mock title", notificator);
+  test("Notificator should throw", () => {
+    expect(() => {
+      post.post();
+    }).toThrow();
+  });
 });
 ```
 

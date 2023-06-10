@@ -38,9 +38,9 @@ Olhe para este código
 
 ```ts
 class Notificator {
-	send() {
-		console.log("The notification has been sended");
-	}
+  send() {
+    console.log("The notification has been sended");
+  }
 }
 ```
 
@@ -54,14 +54,14 @@ Agora vamos dar uma olhada neste componente:
 import Notificator from "./Notificator";
 
 class Post {
-	private notificator: Notificator;
-	constructor(public title: string) {
-		this.notificator = new Notificator();
-	}
-	post(): void {
-		console.log(`New post has been published: ${this.title}`);
-		this.notificator.send();
-	}
+  private notificator: Notificator;
+  constructor(public title: string) {
+    this.notificator = new Notificator();
+  }
+  post(): void {
+    console.log(`New post has been published: ${this.title}`);
+    this.notificator.send();
+  }
 }
 ```
 
@@ -107,7 +107,7 @@ Dentro da minha classe Post, eu não estou utilizando toda a classe Notificator 
 
 ```ts
 interface NotificatorShape {
-	send(): void;
+  send(): void;
 }
 ```
 
@@ -117,9 +117,9 @@ Agora eu preciso implementar minha interface na minha classe Interface, vamos ve
 
 ```js
 class Notificator {
-	send() {
-		console.log("The notification has been sended");
-	}
+  send() {
+    console.log("The notification has been sended");
+  }
 }
 ```
 
@@ -129,9 +129,9 @@ class Notificator {
 import NotificatorShape from "../@types/Notificator";
 
 class Notificator implements NotificatorShape {
-	send() {
-		console.log("The notification has been sended");
-	}
+  send() {
+    console.log("The notification has been sended");
+  }
 }
 ```
 
@@ -232,8 +232,8 @@ Este primeiro argumento é como o título da unidade, e o segundo é um callback
 
 ```js
 describe("Checking if the post class is working good", () => {
-	const notificatorMock: NotificatorShape = { send() {} };
-	const post = new Post("Mock title", notificatorMock);
+  const notificatorMock: NotificatorShape = { send() {} };
+  const post = new Post("Mock title", notificatorMock);
 });
 ```
 
@@ -243,17 +243,17 @@ describe("Checking if the post class is working good", () => {
 
 ```js
 describe("Checking if the post class is working good", () => {
-	const notificatorMock: NotificatorShape = { send() {} };
-	const post = new Post("Mock title", notificatorMock);
+  const notificatorMock: NotificatorShape = { send() {} };
+  const post = new Post("Mock title", notificatorMock);
 
-	test("Should've title", () => {
-		expect(post).toHaveProperty("title");
-	});
+  test("Should've title", () => {
+    expect(post).toHaveProperty("title");
+  });
 
-	test("Should've post", () => {
-		0;
-		expect(post).toHaveProperty("post");
-	});
+  test("Should've post", () => {
+    0;
+    expect(post).toHaveProperty("post");
+  });
 });
 ```
 
@@ -267,26 +267,26 @@ describe("Checking if the post class is working good", () => {
 
 ```js
 describe("Checking if the post class is working good", () => {
-	const notificatorMock: NotificatorShape = { send() {} };
-	const post = new Post("Mock title", notificatorMock);
+  const notificatorMock: NotificatorShape = { send() {} };
+  const post = new Post("Mock title", notificatorMock);
 
-	test("Should've title", () => {
-		expect(post).toHaveProperty("title");
-	});
+  test("Should've title", () => {
+    expect(post).toHaveProperty("title");
+  });
 
-	test("Should've post", () => {
-		0;
-		expect(post).toHaveProperty("post");
-	});
+  test("Should've post", () => {
+    0;
+    expect(post).toHaveProperty("post");
+  });
 });
 describe("Running to error", () => {
-	const notificator = new Notificator();
-	const post = new Post("Mock title", notificator);
-	test("Notificator should throw", () => {
-		expect(() => {
-			post.post();
-		}).toThrow();
-	});
+  const notificator = new Notificator();
+  const post = new Post("Mock title", notificator);
+  test("Notificator should throw", () => {
+    expect(() => {
+      post.post();
+    }).toThrow();
+  });
 });
 ```
 
